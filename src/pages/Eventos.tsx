@@ -61,10 +61,10 @@ export default function Eventos() {
       <EventosHero />
 
       <section className="bg-[var(--color-bg)] px-4 py-16 sm:px-6 lg:py-20">
-        <div className="mx-auto max-w-4xl space-y-5">
+        <div className="event-ticket-list mx-auto max-w-4xl space-y-5">
           {destaque ? <FeaturedTicket evento={destaque} /> : null}
-          {resto.map((evento, i) => (
-            <SmallTicket key={evento.id} evento={evento} delay={(i + 1) * 90} />
+          {resto.map((evento) => (
+            <SmallTicket key={evento.id} evento={evento} />
           ))}
         </div>
       </section>
@@ -105,12 +105,6 @@ function EventosHero() {
 
 /* ===== Reusable ticket pieces ===== */
 
-const dotTexture = {
-  backgroundImage:
-    "radial-gradient(circle, rgba(255,255,255,0.13) 1px, transparent 1px)",
-  backgroundSize: "20px 20px",
-} as const;
-
 function Perforation() {
   return (
     <div className="relative w-px shrink-0 self-stretch bg-[var(--color-border)]">
@@ -137,12 +131,9 @@ function FeaturedTicket({ evento }: { evento: Evento }) {
   const { label, Icon } = tipoConfig[evento.tipo];
 
   return (
-    <article className="reveal-up flex overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-shadow duration-[180ms] hover:shadow-[0_18px_50px_-22px_rgba(0,0,0,0.3)]">
+    <article className="event-ticket reveal-up flex overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-shadow duration-[180ms] hover:shadow-[0_18px_50px_-22px_rgba(0,0,0,0.3)]">
       {/* Date stub */}
-      <div
-        className="relative flex w-24 shrink-0 flex-col items-center justify-center bg-[var(--color-mack)] px-3 py-7 text-center text-white sm:w-36"
-        style={dotTexture}
-      >
+      <div className="event-ticket-date-stub relative flex w-24 shrink-0 flex-col items-center justify-center bg-[var(--color-mack)] px-3 py-7 text-center text-white sm:w-36">
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
           {monthShort}
         </span>
@@ -195,20 +186,14 @@ function FeaturedTicket({ evento }: { evento: Evento }) {
 
 /* ===== Smaller ticket ===== */
 
-function SmallTicket({ evento, delay }: { evento: Evento; delay: number }) {
+function SmallTicket({ evento }: { evento: Evento }) {
   const { day, monthShort, weekday } = dateParts(evento.data);
   const { label, Icon } = tipoConfig[evento.tipo];
 
   return (
-    <article
-      className="reveal-up group mx-auto flex w-full max-w-[44rem] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-shadow duration-[180ms] hover:shadow-[0_12px_36px_-20px_rgba(0,0,0,0.25)]"
-      style={{ animationDelay: `${delay}ms` }}
-    >
+    <article className="event-ticket reveal-up group mx-auto flex w-full max-w-[44rem] overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-surface)] transition-shadow duration-[180ms] hover:shadow-[0_12px_36px_-20px_rgba(0,0,0,0.25)]">
       {/* Date stub */}
-      <div
-        className="relative flex w-20 shrink-0 flex-col items-center justify-center bg-[var(--color-mack)] px-2 py-7 text-center text-white sm:w-24"
-        style={dotTexture}
-      >
+      <div className="event-ticket-date-stub relative flex w-20 shrink-0 flex-col items-center justify-center bg-[var(--color-mack)] px-2 py-7 text-center text-white sm:w-24">
         <span className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white/80">
           {monthShort}
         </span>
