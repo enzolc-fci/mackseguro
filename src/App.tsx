@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Outlet } from "react-router-dom";
 import { useAuth } from "@clerk/react";
 import { setSupabaseTokenGetter } from "./lib/supabaseConfig.ts";
 import Navbar from "./components/layout/Navbar.tsx";
@@ -40,12 +40,14 @@ function NotFoundPage() {
 }
 
 /** Layout for app pages (trilhas, materiais, etc.) — includes Navbar + Footer */
-function AppLayout({ children }: { children: React.ReactNode }) {
+function AppLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <FontSizeControl />
-      <main className="page-shell flex-1">{children}</main>
+      <main className="page-shell flex-1">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
@@ -79,19 +81,21 @@ function App() {
           <Route path="/auth/sign-up/*" element={<AuthSignUp />} />
 
           {/* App pages — shared Navbar + Footer */}
-          <Route path="/" element={<AppLayout><Home /></AppLayout>} />
-          <Route path="/trilhas" element={<AppLayout><Trilhas /></AppLayout>} />
-          <Route path="/trilhas/:slug" element={<AppLayout><TrilhaDetalhe /></AppLayout>} />
-          <Route
-            path="/trilhas/:slug/modulo/:moduloId"
-            element={<AppLayout><CourseAccessGate><ModuloConteudo /></CourseAccessGate></AppLayout>}
-          />
-          <Route path="/materiais" element={<AppLayout><Materiais /></AppLayout>} />
-          <Route path="/pilulas" element={<AppLayout><Pilulas /></AppLayout>} />
-          <Route path="/eventos" element={<AppLayout><Eventos /></AppLayout>} />
-          <Route path="/sobre" element={<AppLayout><Sobre /></AppLayout>} />
-          <Route path="/perfil" element={<AppLayout><CourseAccessGate><Perfil /></CourseAccessGate></AppLayout>} />
-          <Route path="/certificados/:certificateCode" element={<AppLayout><CertificadoValidacao /></AppLayout>} />
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/trilhas" element={<Trilhas />} />
+            <Route path="/trilhas/:slug" element={<TrilhaDetalhe />} />
+            <Route
+              path="/trilhas/:slug/modulo/:moduloId"
+              element={<CourseAccessGate><ModuloConteudo /></CourseAccessGate>}
+            />
+            <Route path="/materiais" element={<Materiais />} />
+            <Route path="/pilulas" element={<Pilulas />} />
+            <Route path="/eventos" element={<Eventos />} />
+            <Route path="/sobre" element={<Sobre />} />
+            <Route path="/perfil" element={<CourseAccessGate><Perfil /></CourseAccessGate>} />
+            <Route path="/certificados/:certificateCode" element={<CertificadoValidacao />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </React.Suspense>
